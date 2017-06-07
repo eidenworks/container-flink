@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: spark-image
+  name: flink-image
   annotations:
-    description: Spark builder
-    tags: spark
+    description: Flink builder
+    tags: flink
 
 parameters:
 - name: SOURCE_REPOSITORY_URL
   description: URL of the Git repository Dockerfile
   required: true
-  value: https://github.com/keedio/openshift-spark.git
+  value: https://github.com/eidenworks/container-flink.git
 - name: OBJECT_NAME_PREFIX
   description: Name prefix for each object created
   required: true
-  value: spark-image 
+  value: flink-image 
 
 objects:
 - apiVersion: v1
