@@ -39,7 +39,7 @@ USER 372
 # error out if it cannot.
 WORKDIR /tmp
 
-ENTRYPOINT ["/entrypoint"]
+#ENTRYPOINT ["/entrypoint"]
 
 # Start the main process
 CMD ["/opt/flink/bin/start-cluster.sh"]
