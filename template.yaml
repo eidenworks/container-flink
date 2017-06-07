@@ -1,10 +1,10 @@
 kind: Template
 apiVersion: v1
-template: spark
+template: flink
 metadata:
-  name: spark
+  name: flink
 labels:
-  app: sparkcluster
+  app: flinkcluster
 objects:
 
 - kind: Service
@@ -30,8 +30,8 @@ objects:
   spec:
     ports:
       - protocol: TCP
-        port: 8080
-        targetPort: 8080
+        port: 8081
+        targetPort: 8081
     selector:
       name: ${MASTER_NAME}
 
@@ -54,16 +54,16 @@ objects:
       spec:
         containers:
           - name: ${MASTER_NAME}
-            image: ${SPARK_IMAGE}
+            image: ${FLINK_IMAGE}
             env:
-              - name: SPARK_MASTER_PORT
+              - name: FLINK_MASTER_PORT
                 value: "7077"
-              - name: SPARK_MASTER_WEBUI_PORT
-                value: "8080"
+              - name: FLINK_MASTER_WEBUI_PORT
+                value: "8081"
             ports:
               - containerPort: 7077
                 protocol: TCP
-              - containerPort: 8080
+              - containerPort: 8081
                 protocol: TCP
 
 - kind: DeploymentConfig
@@ -85,24 +85,24 @@ objects:
       spec:
         containers:
           - name: ${WORKER_NAME}
-            image: ${SPARK_IMAGE}
+            image: ${FLINK_IMAGE}
             env:
-              - name: SPARK_MASTER_ADDRESS
-                value: spark://${MASTER_NAME}:7077
-              - name: SPARK_MASTER_UI_ADDRESS
-                value: http://${MASTER_NAME}-webui:8080
+              - name: FLINK_MASTER_ADDRESS
+                value: flink://${MASTER_NAME}:7077
+              - name: FLINK_MASTER_UI_ADDRESS
+                value: http://${MASTER_NAME}-webui:8081
 
 parameters:
-- name: SPARK_IMAGE
-  description: Name of the Spark master/worker image
-  value: _REPO_/spark-image:latest
+- name: FLINK_IMAGE
+  description: Name of the Flink master/worker image
+  value: _REPO_/flink-image:latest
 - name: MASTER_NAME
   description: master name used as a service name and a selector
   generate: expression
-  from: "spark-master-[a-z0-9]{4}"
+  from: "flink-master-[a-z0-9]{4}"
   required: true
 - name: WORKER_NAME
   description: worker name used as a selector
   generate: expression
-  from: "spark-worker-[a-z0-9]{4}"
+  from: "flink-worker-[a-z0-9]{4}"
   required: true

@@ -1,10 +1,10 @@
-LOCAL_IMAGE=openshift-spark
-SPARK_IMAGE=mattf/openshift-spark
+LOCAL_IMAGE=container-flink
+FLINK_IMAGE=eidenworks/-container-flink
 
 # If you're pushing to an integrated registry
-# in Openshift, SPARK_IMAGE will look something like this
+# in Openshift, FLINK_IMAGE will look something like this
 
-# SPARK_IMAGE=172.30.242.71:5000/myproject/openshift-spark
+# FLINK_IMAGE=172.30.242.71:5000/myproject/container-flink
 
 .PHONY: build clean push create destroy
 
@@ -15,11 +15,11 @@ clean:
 	docker rmi $(LOCAL_IMAGE)
 
 push: build
-	docker tag $(LOCAL_IMAGE) $(SPARK_IMAGE)
-	docker push $(SPARK_IMAGE)
+	docker tag $(LOCAL_IMAGE) $(FLINK_IMAGE)
+	docker push $(FLINK_IMAGE)
 
 create: push template.yaml
-	oc process -f template.yaml -v SPARK_IMAGE=$(SPARK_IMAGE) > template.active
+	oc process -f template.yaml -v FLINK_IMAGE=$(FLINK_IMAGE) > template.active
 	oc create -f template.active
 
 destroy: template.active
